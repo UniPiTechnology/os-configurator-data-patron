@@ -1,0 +1,14 @@
+Source: unipi-os-configurator-data
+Section: unknown
+Priority: optional
+Maintainer: Martin Kudlacek <kudlacek@unipi.technology>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 3.9.8.0
+Homepage: www.unipi.technology
+#Vcs-Git: https://git.unipi.technology/UniPi/os-configurator/data-patron
+#Vcs-Browser: https://git.unipi.technology/UniPi/os-configurator/data-patron
+
+Package: unipi-os-configurator-data
+Architecture: any
+Description: Unipi Patron specific data for Unipi OS configurator
+Depends: unipi-os-configurator 
