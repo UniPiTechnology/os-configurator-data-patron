@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+CONFIG_NAME_A=unipi.list
+CONFIG_NAME_B=debian-nonfree.list
+CONFIG_ORIGINAL_LOCATION=/etc/apt/sources.list.d/
+
+CONFIG_DIVERT_LOCATION=/usr/share/divert_machine/
+
+mkdir -p ${CONFIG_DIVERT_LOCATION}
+
+dpkg-divert --package divertmachine --rename --divert "${CONFIG_DIVERT_LOCATION}${CONFIG_NAME_A}" "${CONFIG_ORIGINAL_LOCATION}${CONFIG_NAME_A}"
+
+if [ -f ${CONFIG_ORIGINAL_LOCATION}${CONFIG_NAME_B} ]; then
+  dpkg-divert --package divertmachine --rename --divert "${CONFIG_DIVERT_LOCATION}${CONFIG_NAME_B}" "${CONFIG_ORIGINAL_LOCATION}${CONFIG_NAME_B}"
+fi
+
+sync
+
+#DEBHELPER#
