@@ -1,0 +1,8 @@
+### HOWTO
+# 1. connect any USB-SERIAL device
+# 2. assume the path is /dev/ttyUSB0
+# 3. check the possible matching rules: udevadm info /dev/ttyUSB0
+
+# Zulu
+ENV{ID_PATH}=="platform-ci_hdrc.1-usb-0:1.1:1.0", SUBSYSTEM=="tty", SYMLINK+="serial/by-port/0"
+ENV{ID_PATH}=="platform-ci_hdrc.1-usb-0:1.2:1.0", SUBSYSTEM=="tty", SYMLINK+="serial/by-port/1"
