@@ -1,0 +1,28 @@
+{% macro board(slot) %}
+					fw_variant = <0x0810>;
+					fw_name = "E-16Di_U-14Ro-1";
+					board_name = "E-16Di_U-14Ro-1";
+					sys_board_name = "E_16Di_U_14Ro";
+					cycle_counter = <1031>;
+					master_watchdog_enable = <2>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = {% for i in range(16) -%} "DI{{slot}}_{{i+1}}"{{ "," if not loop.last else ";" }}{%endfor%}
+						ngpio = <16>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <3>;
+					};
+					do {
+						compatible = "unipi,gpio-ro";
+						ngpio = <14>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = {% for i in range(14) -%} "RO{{slot}}_{{i+1}}"{{ "," if not loop.last else ";" }}{%endfor%}
+					};
+
+{%- endmacro %}

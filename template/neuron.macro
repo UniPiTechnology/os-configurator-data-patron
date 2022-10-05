@@ -1,0 +1,77 @@
+{% macro pinctrl() %}
+		target = <&gpio>;
+		__overlay__ {
+			spi0_cs_pins4: spi0_cs_pins4 {
+				brcm,pins = <8 7 24 25>;
+				brcm,function = <1>;
+				brcm,pull = <0>;
+			};
+
+			neuron_1_irq_pin: neuron_1_irq_pin {
+				brcm,pins = <27>;
+				brcm,function = <0>;
+				brcm,pull = <1>;
+			};
+
+			neuron_2_irq_pin: neuron_2_irq_pin {
+				brcm,pins = <23>;
+				brcm,function = <0>;
+				brcm,pull = <1>;
+			};
+
+			neuron_3_irq_pin: neuron_3_irq_pin {
+				brcm,pins = <22>;
+				brcm,function = <0>;
+				brcm,pull = <1>;
+			};
+		};
+{%- endmacro %}
+
+{% macro neuron_int(slot) %}
+					pinctrl-names = "default";
+					pinctrl-0 = <&neuron_{{slot}}_irq_pin>;
+					interrupt-parent = <&gpio>;
+					{%  if slot == 1 -%}interrupts = <27 1>;{%- endif %}
+					{%- if slot == 2 -%}interrupts = <23 1>;{%- endif %}
+					{%- if slot == 3 -%}interrupts = <22 1>;{%- endif %}
+{%- endmacro %}
+
+
+{% macro spi() %}
+		target = <&spi0>;
+		__overlay__ {
+			status = "okay";
+			pinctrl-0 = <&spi0_pins>, <&spi0_cs_pins4>;
+			cs-gpios = <&gpio 8 1>, <&gpio 7 1>, <&gpio 24 1>, <&gpio 25 1>;
+		};
+{%- endmacro %}
+
+
+{% macro neuron1(slot, board) %}
+{% import board["macro"] as b %}
+		target = <&spi0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			neuronspi{{slot}}: neuronspi@{{slot}} {
+				compatible = "unipispi";
+				reg = <{{slot}}>;
+				spi-max-frequency = <{{ board["speed"] | default(12000000) }}>;
+				status = "okay";
+				modbus-address = <{{slot}}>;
+				neuron-board-index = <{{ slot - 1 }}>;
+				neuron-probe-always-succeeds = <0>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup{{slot}} {
+					reg = <{{slot}}>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					{%- if not board["no_int"] -%}
+					{{- neuron_int(slot) }}
+					{%- endif %}
+					{{- b.board(slot) }}
+				};
+			};
+		};
+{%- endmacro %}
+
