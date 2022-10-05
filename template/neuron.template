@@ -1,0 +1,56 @@
+/dts-v1/;
+{% import 'neuron.macro' as m  %}
+
+/plugin/;
+
+/ {
+	/* the cs and interrupt pin of the neuron-controller */
+	fragment@0 {
+		{{- m.pinctrl() }}
+	};
+
+	fragment@1 {
+		{{- m.spi() }}
+	};
+
+	fragment@2 {
+		target = <&spidev1>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	{%- if boards|length >=1 %}
+	fragment@3 {
+		{{- m.neuron1(1, boards[0]) }}
+	};
+	{%- endif %}
+
+	{%- if boards|length>=2 %}
+	fragment@5 {
+		{{- m.neuron1(2, boards[1]) }}
+	};
+	{%- endif %}
+
+	{%- if boards|length>=3 %}
+	fragment@7 {
+		{{- m.neuron1(3, boards[2]) }}
+	};
+	{%- endif %}
+
+
+	__overrides__ {
+	{%- if boards|length>=1 %}
+		probe1-succeeds = <&neuronspi1>,"neuron-probe-always-succeeds:0";
+		frequency1 = <&neuronspi1>,"spi-max-frequency:0";
+	{%- endif -%}
+	{%- if boards|length>=2 %}
+		probe2-succeeds = <&neuronspi2>,"neuron-probe-always-succeeds:0";
+		frequency2 = <&neuronspi2>,"spi-max-frequency:0";
+	{%- endif -%}
+	{%- if boards|length>=3 %}
+		probe3-succeeds = <&neuronspi3>,"neuron-probe-always-succeeds:0";
+		frequency3 = <&neuronspi3>,"spi-max-frequency:0";
+	{%- endif %}
+	};
+};
