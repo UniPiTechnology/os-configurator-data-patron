@@ -28,26 +28,62 @@ E4AI4AO6DI: &e4ai4ao6di5ro
 
 product:
     S107:
-        template: neuron.template
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain ]
+        options:
+            has_ds2482: 1
+    S117:
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain ]
+        options:
+            has_ds2482: 1
+    S167:
+        template: boardset.template
         udev:     iogroup.template.rules
         boards: [ *brain ]
         options:
             has_ds2482: 1
     S207:
-        template: neuron.template
+        template: boardset.template
         udev:     iogroup.template.rules
-        boards: [ *brain, *e8di8do ]
+        boards: [ *e8di8do ]
         options:
             has_ds2482: 1
     M207:
-        template: neuron.template
+        template: boardset.template
         udev:     iogroup.template.rules
         boards: [ *brain, *e16di14ro ]
         options:
             has_ds2482: 1
     M527:
-        template: neuron.template
+        template: boardset.template
         udev:     iogroup.template.rules
-        boards: [ *brain, *e30di ]
+        boards: [ *brain, *e4ai4ao4di5ro ]
+        options:
+            has_ds2482: 1
+    M267:
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain, *e16di14ro ]
+        options:
+            has_ds2482: 1
+    M567:
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain, *e4ai4ao4di5ro ]
+        options:
+            has_ds2482: 1
+    L207:
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain, *e16di14ro, *e16di14ro ]
+        options:
+            has_ds2482: 1
+    L527:
+        template: boardset.template
+        udev:     iogroup.template.rules
+        boards: [ *brain, *e4ai4ao4di5ro, *e16di14ro ]
         options:
             has_ds2482: 1
