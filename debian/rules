@@ -9,7 +9,7 @@ LINUX_DIR_PATH = $(shell dpkg -L unipi-kernel-headers | sed -n '/^\/lib\/modules
 	dh $@
 
 override_dh_auto_clean:
-        dh_auto_clean -- LINUX_DIR_PATH="$(LINUX_DIR_PATH)"
+	dh_auto_clean -- LINUX_DIR_PATH="$(LINUX_DIR_PATH)"
 
 override_dh_auto_build:
-        dh_auto_build -- LINUX_DIR_PATH="$(LINUX_DIR_PATH)"
+	dh_auto_build -- LINUX_DIR_PATH="$(LINUX_DIR_PATH)"
