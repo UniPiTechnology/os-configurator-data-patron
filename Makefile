@@ -6,7 +6,7 @@ LINUX_DIR_PATH = /lib/modules/$(shell uname -r)/build
 INSTALL = install
 PWD = $(shell pwd)
 WORK = overlays
-DTS_DEST_DIR = /boot/overlays
+DTS_DEST_DIR = /opt/unipi/os-configurator/overlays
 UDEV_DEST_DIR = /opt/unipi/os-configurator/udev
 LIB_DEST_DIR = /opt/unipi/os-configurator
 DESCRIPTION = description.yaml
@@ -29,7 +29,7 @@ udev:
 
 $(WORK):
 	@mkdir -p $(WORK)
-	cp template/*.dts $(WORK)
+	@cp template/*.dts $(WORK) 2>/dev/null || :
 
 $(WORK)/Makefile: $(templates) $(DESCRIPTION) $(WORK) udev
 	@python3 render-slot.py $(DESCRIPTION) -t template -o $(WORK)
