@@ -1,0 +1,43 @@
+{% macro board(slot) %}
+					fw_variant = <0x0010>, <0x0020>, <0x0030>;
+					fw_name = "B-1000-1", "B-1000-2", "B-1000-3";
+					board_name = "B-1000-1";
+					sys_board_name = "B_1000";
+					cycle_counter = <1032>;
+					master_watchdog_enable = <6>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI1_1", "DI1_2", "DI1_3", "DI1_4";
+						ngpio = <4>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <7>;
+					};
+					do {
+						compatible = "unipi,gpio-do";
+						ngpio = <4>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DO1_1", "DO1_2", "DO1_3", "DO1_4";
+					};
+					aio {
+						compatible = "unipi,aio_legacy";
+						ai-value-reg = <3>;
+						ai-mode-reg = <1024>;
+						ao-value-reg = <2>;
+						ao-mode-reg = <1019>;
+					};
+					uart {
+						compatible = "unipi,uart";
+						port-count = <1>;
+					};
+					led {
+						compatible = "unipi,leds";
+						coil-range = <8 4>;
+						label-prefix = "brain-user";
+					};
+{%- endmacro %}
