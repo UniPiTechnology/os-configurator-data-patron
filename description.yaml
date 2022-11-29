@@ -18,12 +18,12 @@ E30RO: &e30ro
 E4AI4AO: &e4ai4ao4di5ro
     macro: E4AI4AO4DI5RO.macro
     no_int: 1
-    speed: 8000000
+    speed: 6000000
 
 E4AI4AO6DI: &e4ai4ao6di5ro
     macro: E4AI4AO6DI5RO.macro
     no_int: 1
-    speed: 8000000
+    speed: 6000000
 
 
 product:
