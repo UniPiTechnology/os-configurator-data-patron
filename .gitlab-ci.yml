@@ -5,3 +5,5 @@ variables:
     package_name: "unipi-os-configurator-data"
     build_for_product: "patron"
     build_for_distribution: "stable newstable"
+    publish_dst_url: "git@github.com:UniPiTechnology/OS-Configurator/data-patron.git"
+    publish_to_remote: "yes"
