@@ -27,6 +27,7 @@
 					uart {
 						compatible = "unipi,uart";
 						port-count = <1>;
+						port-line = <{{slot-1}}>;
 					};
 					led {
 						compatible = "unipi,leds";
