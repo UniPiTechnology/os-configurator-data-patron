@@ -41,4 +41,9 @@
 						coil-range = <8 4>;
 						label-prefix = "brain-user";
 					};
+					sysled {
+						compatible = "unipi,leds";
+						coil-range = <12 6>;
+						label-prefix = "unipi:green:sysled-x";
+					};
 {%- endmacro %}
