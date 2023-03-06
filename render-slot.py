@@ -80,8 +80,19 @@ def render_product_dt(p_id, p_desc, jinjaenv, exporter, product):
 	exporter.add_product(p_id, dt=dtname)
 
 def render_product_udev(p_id, p_desc, jinjaenv, exporter, product):
-	t = jinjaenv.get_template(name=p_desc["udev"])
-	result = t.render(id=p_id, **p_desc)
+
+	udev = p_desc["udev"]
+
+	if isinstance(udev,  list):
+		result = str()
+		for rule in udev:
+			t = jinjaenv.get_template(name=rule)
+			result += t.render(id=p_id, **p_desc)
+			result += '\n'
+	else:
+		t = jinjaenv.get_template(name=udev)
+		result = t.render(id=p_id, **p_desc)
+
 	udevname = exporter.get_name(product, prefix="")
 	exporter.writeudev(udevname, result)
 	exporter.add_product(p_id, udev=udevname)
@@ -118,7 +129,7 @@ def gener_by_desc(description, uniee_data, jinjaenv, exporter):
 		if not isinstance(p_desc, dict): continue
 		if "template" in p_desc:
 			render_product_dt(p_id, p_desc, jinjaenv, exporter, product)
-		if "udev" in p_desc:
+		if "udev" in p_desc: # Allow multiple udev rules
 			render_product_udev(p_id, p_desc, jinjaenv, exporter, product)
 		if ("options" in p_desc) and isinstance(p_desc["options"], dict):
 			exporter.add_product(p_id, **p_desc["options"])
