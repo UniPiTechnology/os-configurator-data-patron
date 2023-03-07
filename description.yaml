@@ -41,10 +41,11 @@ product:
             has_ds2482: 1
     S167:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, lte.template.rules ]
         boards: [ *brain ]
         options:
             has_ds2482: 1
+            has_lte : 1
     S207:
         template: boardset.template
         udev:     iogroup.template.rules
@@ -65,16 +66,20 @@ product:
             has_ds2482: 1
     M267:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, lte.template.rules ]
         boards: [ *brain, *e16di14ro ]
         options:
             has_ds2482: 1
+            has_lte : 1
+
     M567:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, lte.template.rules ]
         boards: [ *brain, *e4ai4ao4di5ro ]
         options:
             has_ds2482: 1
+            has_lte : 1
+
     L207:
         template: boardset.template
         udev:     iogroup.template.rules
