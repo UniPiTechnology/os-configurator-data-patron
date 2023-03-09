@@ -24,4 +24,9 @@
 						#gpio-cells = <2>;
 						gpio-line-names = {% for i in range(8) -%} "RO{{slot}}_{{i+1}}"{{ "," if not loop.last else ";" }}{%endfor%}
 					};
+                    sysled {
+						compatible = "unipi,leds";
+						coil-range = <16 6>;
+						label-prefix = "unipi:green:sysled-x";
+					};
 {%- endmacro %}
