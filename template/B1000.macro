@@ -39,7 +39,7 @@
 					led {
 						compatible = "unipi,leds";
 						coil-range = <8 4>;
-						label-prefix = "brain-user";
+						label-prefix = "unipi:green:uled-x";
 					};
 					sysled {
 						compatible = "unipi,leds";
