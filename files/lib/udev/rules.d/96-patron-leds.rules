@@ -1,9 +1,9 @@
 
 # Serial LEDs on ZULU-based units
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x0", RUN+="/bin/sh -ec 'echo ttymxc2-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x1", RUN+="/bin/sh -ec 'echo ttymxc2-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x2", RUN+="/bin/sh -ec 'echo ttymxc1-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x3", RUN+="/bin/sh -ec 'echo ttymxc1-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x4", RUN+="/bin/sh -ec 'echo ttymxc0-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
-ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x5", RUN+="/bin/sh -ec 'echo ttymxc0-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x1", RUN+="/bin/sh -ec 'echo ttymxc2-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x2", RUN+="/bin/sh -ec 'echo ttymxc2-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x3", RUN+="/bin/sh -ec 'echo ttymxc1-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x4", RUN+="/bin/sh -ec 'echo ttymxc1-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x5", RUN+="/bin/sh -ec 'echo ttymxc0-tx > /sys/$env{DEVPATH}/trigger || exit 0'"
+ACTION=="add", SUBSYSTEM=="leds", DEVPATH=="*/leds/unipi*sysled-x6", RUN+="/bin/sh -ec 'echo ttymxc0-rx > /sys/$env{DEVPATH}/trigger || exit 0'"
 
