@@ -29,44 +29,44 @@ E4AI4AO6DI: &e4ai4ao6di5ro
 product:
     S107:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain ]
         options:
             has_ds2482: 1
     S117:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain ]
         options:
             has_ds2482: 1
     S167:
         template: boardset.template
-        udev:   [ iogroup.template.rules, lte.template.rules ]
+        udev:   [ iogroup.template.rules, std-leds.rules, lte.template.rules ]
         boards: [ *brain ]
         options:
             has_ds2482: 1
             has_lte : 1
     S207:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *e8di8do ]
         options:
             has_ds2482: 1
     M207:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain, *e16di14ro ]
         options:
             has_ds2482: 1
     M527:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain, *e4ai4ao4di5ro ]
         options:
             has_ds2482: 1
     M267:
         template: boardset.template
-        udev:   [ iogroup.template.rules, lte.template.rules ]
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain, *e16di14ro ]
         options:
             has_ds2482: 1
@@ -74,7 +74,7 @@ product:
 
     M567:
         template: boardset.template
-        udev:   [ iogroup.template.rules, lte.template.rules ]
+        udev:   [ iogroup.template.rules, std-leds.rules, lte.template.rules ]
         boards: [ *brain, *e4ai4ao4di5ro ]
         options:
             has_ds2482: 1
@@ -82,13 +82,19 @@ product:
 
     L207:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain, *e16di14ro, *e16di14ro ]
         options:
             has_ds2482: 1
     L527:
         template: boardset.template
-        udev:     iogroup.template.rules
+        udev:   [ iogroup.template.rules, std-leds.rules ]
         boards: [ *brain, *e4ai4ao4di5ro, *e16di14ro ]
         options:
             has_ds2482: 1
+    S227:
+        template: boardset.template
+        udev:   [ iogroup.template.rules, s227-leds.rules ]
+        boards: [ *e8di8do ]
+        options:
+            has_ds2482: 0
