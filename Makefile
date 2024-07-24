@@ -1,61 +1,51 @@
-INSTALL = install
 
-.PHONY: all overlays
+.PHONY: all overlays dts
 
-LINUX_DIR_PATH = /lib/modules/$(shell uname -r)/build
+LINUX_BUILD_PATH = /lib/modules/$(shell uname -r)/build
 INSTALL = install
 PWD = $(shell pwd)
-WORK = overlays
-DTS_DEST_DIR = /opt/unipi/os-configurator/overlays
+OVERLAY_DEST_DIR = /boot/overlays
 UDEV_DEST_DIR = /opt/unipi/os-configurator/udev
 LIB_DEST_DIR = /opt/unipi/os-configurator
-DESCRIPTION = description.yaml
 
-#DTC_FLAGS_unipi-iris-unispi-slot12 := -@
-templates =  $(wildcard *.template)
 
-#all: $(dtsi) $(templates) $(WORK)/imx8mm-pinfunc.h
+all: overlays dts
 
-all: $(WORK)/imx8mm-pinfunc.h unipi_values.py
-	MAKEFLAGS="$(MAKEFLAGS)" $(MAKE) -C $(LINUX_DIR_PATH) M=$(PWD)/$(WORK)
+dts: dts/unipi-zulu.dtsi dts/imx8mm-pinfunc.h dts/imx8mm.dtsi $(LINUX_BUILD_PATH)/Module.symvers $(USE_SPINOR)
+	@MAKEFLAGS="$(MAKEFLAGS)" $(MAKE) -C $(LINUX_BUILD_PATH) M=$(PWD)/$@
 
-$(WORK)/imx8mm-pinfunc.h:
-	@mkdir -p $(WORK)
-	@ln -s $(LINUX_DIR_PATH)/arch/arm64/boot/dts/freescale/imx8mm-pinfunc.h $@
+overlays: overlays/imx8mm-pinfunc.h $(LINUX_BUILD_PATH)/Module.symvers
+	@MAKEFLAGS="$(MAKEFLAGS)" $(MAKE) -C $(LINUX_BUILD_PATH) M=$(PWD)/$@
 
-udev:
-	@mkdir -p udev
-	@find udev -type f ! -name \*.template.rules -exec cp \{\} udev \;
+%.dtsi %/imx8mm-pinfunc.h:
+	@S="$(LINUX_BUILD_PATH)/arch/arm64/boot/dts/freescale/$$(basename $@)"; \
+	 if [ -e "$$S" ]; then ln -s "$$S" $@;\
+	 else echo "Missing file $$S" >&2; false; fi
 
-$(WORK):
-	@mkdir -p $(WORK)
-	@cp template/*.dts $(WORK) 2>/dev/null || :
+$(LINUX_BUILD_PATH)/Module.symvers:
+	@touch $@
 
-$(WORK)/Makefile: $(templates) $(DESCRIPTION) $(WORK) udev
-	@python3 render-slot.py $(DESCRIPTION) -t template -o $(WORK)
 
-unipi_values.py: template/unipi-values.template.py $(DESCRIPTION) $(WORK) udev
-	@python3 render-slot.py $(DESCRIPTION) -t template -o $(WORK)
-
-#unipi-values.o: unipi-values.c
-#	gcc $^ -c -I unipi-hardware-id/include/ -fPIC
-
-#libunipidata.so: unipi-values.o
-#	gcc $^ -shared -o $@
-
-install: install-dtb install-udev
+install: install-dtb install-udev install-overlays unipi_values.py
 	$(INSTALL) -m 644 unipi_values.py $(DESTDIR)/$(LIB_DEST_DIR)
+	cp -r files/* $(DESTDIR)
 
-install-dtb: $(wildcard $(WORK)/*.dtb)
-	mkdir -p $(DESTDIR)/$(DTS_DEST_DIR)
-	$(INSTALL) -m 644 $^ $(DESTDIR)/$(DTS_DEST_DIR)
+install-overlays: $(wildcard overlays/*.dtb)
+	mkdir -p $(DESTDIR)/$(OVERLAY_DEST_DIR)
+	$(INSTALL) -m 644 $^ $(DESTDIR)/$(OVERLAY_DEST_DIR)
+
+install-dtb: $(wildcard dts/*.dtb)
+	mkdir -p $(DESTDIR)/boot
+	$(INSTALL) -m 644 $^ $(DESTDIR)/boot
 
 install-udev: $(wildcard udev/*.rules)
 	mkdir -p $(DESTDIR)/$(UDEV_DEST_DIR)
 	[ -z "$^" ] || $(INSTALL) -m 644 $^ $(DESTDIR)/$(UDEV_DEST_DIR)
 
 clean:
-	@rm -rf udev $(WORK)
-	@rm -f unipi_values.py
-	@#touch $(WORK)/Makefile && MAKEFLAGS="$(MAKEFLAGS)" $(MAKE) -C $(LINUX_DIR_PATH) M=$(PWD)/$(WORK) clean
-	@#find $(WORK) -type f ! -name \*.dts -exec rm \{\} \;
+	@find overlays \( -name .\*.cmd -o -name .\*.tmp -o -name \*.dtb \
+	      -o -name Module.symvers -o -name modules.order -o -name imx8mm-pinfunc.h \) \
+	      -delete
+	@find dts \( -name .\*.cmd -o -name .\*.tmp -o -name \*.dtb \
+	      -o -name Module.symvers -o -name modules.order -o -name imx8mm-pinfunc.h \) \
+	      -delete

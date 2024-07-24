@@ -1,0 +1,3 @@
+# drive watchdog1 in systemd
+
+setenv board_args ${board_args} systemd.watchdog_device=/dev/watchdog1

@@ -1,0 +1,2 @@
+## disable 1W master driver on i2c bus 2
+fdt set /soc@0/bus@30800000/i2c@30a40000/w1master@18 status "disabled"

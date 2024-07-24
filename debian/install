@@ -1,1 +1,1 @@
-files/*		/
+debian/apt/*		/etc/apt/
