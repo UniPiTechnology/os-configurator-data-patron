@@ -5,7 +5,5 @@
 /dts/*.dtb
 /dts/unipi-zulu.dtsi
 /dts/imx8mm.dtsi
-/overlays/
-/udev/
 /unipi-values.c
 /unipi_values.py

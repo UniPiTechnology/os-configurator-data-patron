@@ -1,0 +1,196 @@
+
+
+/dts-v1/;
+/plugin/;
+/ {
+	compatible = "unipi,zulu";
+
+	fragment@0 {
+		target = <&ecspi3>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;unipispi0: unipispi@0 {
+				compatible = "unipispi";
+				reg = <0>;
+				spi-max-frequency = <12000000>;
+				status = "okay";
+				modbus-address = <1>;
+				neuron-board-index = <0>;
+				neuron-probe-always-succeeds = <0>;
+				allow-protocol-v2 = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup1: iogroup1 {
+					reg = <1>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x0010>, <0x0020>, <0x0030>;
+					fw_name = "B-1000-1", "B-1000-2", "B-1000-3";
+					board_name = "B-1000-1";
+					sys_board_name = "B_1000";
+					cycle_counter = <1032>;
+					master_watchdog_enable = <6>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI1_1", "DI1_2", "DI1_3", "DI1_4";
+						ngpio = <4>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <8>;
+					};
+					do {
+						compatible = "unipi,gpio-do";
+						ngpio = <4>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DO1_1", "DO1_2", "DO1_3", "DO1_4";
+					};
+					aio {
+						compatible = "unipi,aio_legacy";
+						ai-value-reg = <3>;
+						ai-mode-reg = <1024>;
+						ao-value-reg = <2>;
+						ao-mode-reg = <1019>;
+					};
+					uart {
+						compatible = "unipi,uart";
+						port-count = <1>;
+						port-line = <0>;
+					};
+					led {
+						compatible = "unipi,leds";
+						coil-range = <8 4>;
+						label-prefix = "unipi:green:uled-x";
+					};
+					sysleds0:sysled {
+						compatible = "unipi,leds";
+						coil-range = <12 6>;
+						#address-cells = <1>;
+						#size-cells = <0>;
+						label-prefix = "unipi:green:sysled-x";
+					};
+				};
+			};
+		unipispi1: unipispi@1 {
+				compatible = "unipispi";
+				reg = <1>;
+				spi-max-frequency = <12000000>;
+				status = "okay";
+				modbus-address = <2>;
+				neuron-board-index = <1>;
+				neuron-probe-always-succeeds = <0>;
+				allow-protocol-v2 = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup2: iogroup2 {
+					reg = <2>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x0810>;
+					fw_name = "E-16Di_U-14Ro-1";
+					board_name = "E-16Di_U-14Ro-1";
+					sys_board_name = "E_16Di_U_14Ro";
+					cycle_counter = <1031>;
+					master_watchdog_enable = <2>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI1_1","DI1_2","DI1_3","DI1_4","DI1_5","DI1_6","DI1_7","DI1_8","DI1_9","DI1_10","DI1_11","DI1_12","DI1_13","DI1_14","DI1_15","DI1_16";
+						ngpio = <16>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <3>;
+					};
+					do {
+						compatible = "unipi,gpio-ro";
+						ngpio = <14>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "RO1_1","RO1_2","RO1_3","RO1_4","RO1_5","RO1_6","RO1_7","RO1_8","RO1_9","RO1_10","RO1_11","RO1_12","RO1_13","RO1_14";
+					};
+				};
+			};
+		
+		};
+	};
+
+	fragment@1 {
+		target = <&usbotg1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			usbslot1@1 {
+				reg = <1>;
+			};
+		};
+	};
+	fragment@5 {
+		target = <&w1master>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	
+	fragment@10 {
+		target = <&uart1>;
+		__overlay__ {
+			status = "okay";
+			linux,rs485-enabled-at-boot-time;
+		};
+	};
+	fragment@11 {
+		target = <&uart2>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+
+};
+
+
+&iogroup1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_slotirq0>; 
+	interrupt-parent = <&gpio4>;
+	interrupts = <23 1>; /* EDGE RISING*/
+};
+
+
+
+&iogroup2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_slotirq1>; 
+	interrupt-parent = <&gpio5>;
+	interrupts = <20 1>; /* EDGE RISING*/
+};
+
+
+
+
+
+&sysleds0 {
+	rs232-2-txled@2 {
+		reg = <2>;
+		linux,default-trigger = "ttymxc1-tx";
+	};
+	rs232-2-rxled@3 {
+		reg = <3>;
+		linux,default-trigger = "ttymxc1-rx";
+	};
+	rs485-3-txled@4 {
+		reg = <4>;
+		linux,default-trigger = "ttymxc0-tx";
+	};
+	rs485-3-rxled@5 {
+		reg = <5>;
+		linux,default-trigger = "ttymxc0-rx";
+	};
+};

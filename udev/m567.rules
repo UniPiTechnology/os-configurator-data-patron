@@ -1,0 +1,48 @@
+
+ACTION=="add|remove", SUBSYSTEM=="iogroup", DEVPATH=="*/iogroup1",  RUN+="/opt/unipi/tools/uhelper '' iogroup1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="unipi_gpio", DEVPATH=="*/iogroup1/*",  RUN+="/opt/unipi/tools/uhelper '' $name 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="iio", DEVPATH=="*/iogroup1/*",  RUN+="/opt/unipi/tools/uhelper '' $name 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x1",  RUN+="/opt/unipi/tools/uhelper '' ULED1.1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x2",  RUN+="/opt/unipi/tools/uhelper '' ULED1.2 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x3",  RUN+="/opt/unipi/tools/uhelper '' ULED1.3 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x4",  RUN+="/opt/unipi/tools/uhelper '' ULED1.4 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="iogroup", DEVPATH=="*/iogroup2",  RUN+="/opt/unipi/tools/uhelper '' iogroup2 2 $name"
+ACTION=="add|remove", SUBSYSTEM=="unipi_gpio", DEVPATH=="*/iogroup2/*",  RUN+="/opt/unipi/tools/uhelper '' $name 2 $name"
+ACTION=="add|remove", SUBSYSTEM=="iio", DEVPATH=="*/iogroup2/*",  RUN+="/opt/unipi/tools/uhelper '' $name 2 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttyNS0", RUN+="/opt/unipi/tools/uhelper  rs485-1.1 tty 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttymxc0", RUN+="/opt/unipi/tools/uhelper rs485-1.2 tty 1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-2-txled",  RUN+="/opt/unipi/tools/uhelper rs485-1.2 led.tx 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-2-rxled",  RUN+="/opt/unipi/tools/uhelper rs485-1.2 led.rx 1 $name"
+
+#::: ENV{_LTE_}="<lte>"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.3/tty*",  RUN+="/opt/unipi/tools/uhelper lte.1 tty1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.4/tty*",  RUN+="/opt/unipi/tools/uhelper lte.1 tty2 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="net", DEVPATH=="*ci_hdrc.0/usb1/1-1/1-1:1.0/net/*", RUN+="/opt/unipi/tools/uhelper lte.1 net  1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="rfkill", DEVPATH=="/devices/platform/lte_kill1/rfkill/rfkill0", RUN+="/opt/unipi/tools/uhelper lte.1 rfkill  1 $name"
+ACTION=="add|remove", SUBSYSTEM=="rfkill", DEVPATH=="/devices/platform/lte_kill1/rfkill/rfkill1", RUN+="/opt/unipi/tools/uhelper lte.1 rfreset 1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-sim",  RUN+="/opt/unipi/tools/uhelper lte.1 led.sim 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-net",  RUN+="/opt/unipi/tools/uhelper lte.1 led.net 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-sig",  RUN+="/opt/unipi/tools/uhelper lte.1 led.sig 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-int",  RUN+="/opt/unipi/tools/uhelper lte.1 led.int 1 $name"
+
+# Section Quectel EG912
+
+ACTION=="remove", GOTO="lte_end"
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6001", ENV{USB_HUB_TYPE}="2c7c:6001"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6002", ENV{USB_HUB_TYPE}="2c7c:6002"
+
+ENV{USB_HUB_TYPE}=="2c7c:6001", SUBSYSTEM=="tty", KERNELS=="1-1:1.3", SYMLINK+="ttyLTE_MNG"
+ENV{USB_HUB_TYPE}=="2c7c:6001", SUBSYSTEM=="tty", KERNELS=="1-1:1.4", SYMLINK+="ttyLTE_AT1"
+
+ENV{USB_HUB_TYPE}=="2c7c:6002", SUBSYSTEM=="tty", KERNELS=="1-1:1.3", SYMLINK+="ttyLTE_MNG"
+ENV{USB_HUB_TYPE}=="2c7c:6002", SUBSYSTEM=="tty", KERNELS=="1-1:1.4", SYMLINK+="ttyLTE_AT1"
+
+SUBSYSTEM=="net", ACTION=="add", ENV{USB_HUB_TYPE}=="2c7c:6001", NAME="wwan0"
+SUBSYSTEM=="net", ACTION=="add", ENV{USB_HUB_TYPE}=="2c7c:6002", NAME="wwan0"
+
+LABEL="lte_end"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttyNS1", RUN+="/opt/unipi/tools/uhelper  rs485-2.1 tty 1 $name"

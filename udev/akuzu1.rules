@@ -1,0 +1,20 @@
+
+ACTION=="add|remove", SUBSYSTEM=="iogroup", DEVPATH=="*/iogroup1",  RUN+="/opt/unipi/tools/uhelper '' iogroup1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="unipi_gpio", DEVPATH=="*/iogroup1/*",  RUN+="/opt/unipi/tools/uhelper '' $name 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="iio", DEVPATH=="*/iogroup1/*",  RUN+="/opt/unipi/tools/uhelper '' $name 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x1",  RUN+="/opt/unipi/tools/uhelper '' ULED1.1 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x2",  RUN+="/opt/unipi/tools/uhelper '' ULED1.2 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x3",  RUN+="/opt/unipi/tools/uhelper '' ULED1.3 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:led/leds/unipi:green:uled-x4",  RUN+="/opt/unipi/tools/uhelper '' ULED1.4 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttymxc0", RUN+="/opt/unipi/tools/uhelper rs485.1 tty 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttymxc1", RUN+="/opt/unipi/tools/uhelper rs485.2 tty 1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-1-txled",  RUN+="/opt/unipi/tools/uhelper rs485.1 led.tx 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-1-rxled",  RUN+="/opt/unipi/tools/uhelper rs485.1 led.rx 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-2-txled",  RUN+="/opt/unipi/tools/uhelper rs485.2 led.tx 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/rs485-2-rxled",  RUN+="/opt/unipi/tools/uhelper rs485.2 led.rx 1 $name"
+
+ACTION=="add|remove", SUBSYSTEM=="tty", DEVPATH=="*/tty/ttymxc2", RUN+="/opt/unipi/tools/uhelper gprs tty 1 $name"
+ACTION=="add|remove", SUBSYSTEM=="platform", DEVPATH=="*/platform/unipi-gprs", RUN+="/bin/mkdir -p /run/unipi-plc/by-sys/gprs"
+ACTION=="add|remove", SUBSYSTEM=="platform", DEVPATH=="*/platform/unipi-gprs", RUN+="/bin/ln -sf /sys/devices/platform/unipi-gprs/state -t /run/unipi-plc/by-sys/gprs"
+

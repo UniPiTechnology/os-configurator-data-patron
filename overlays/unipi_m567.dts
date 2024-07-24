@@ -1,0 +1,222 @@
+
+
+/dts-v1/;
+/plugin/;
+/ {
+	compatible = "unipi,zulu";
+
+	fragment@0 {
+		target = <&ecspi3>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;unipispi0: unipispi@0 {
+				compatible = "unipispi";
+				reg = <0>;
+				spi-max-frequency = <12000000>;
+				status = "okay";
+				modbus-address = <1>;
+				neuron-board-index = <0>;
+				neuron-probe-always-succeeds = <0>;
+				allow-protocol-v2 = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup1: iogroup1 {
+					reg = <1>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x0010>, <0x0020>, <0x0030>;
+					fw_name = "B-1000-1", "B-1000-2", "B-1000-3";
+					board_name = "B-1000-1";
+					sys_board_name = "B_1000";
+					cycle_counter = <1032>;
+					master_watchdog_enable = <6>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI1_1", "DI1_2", "DI1_3", "DI1_4";
+						ngpio = <4>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <8>;
+					};
+					do {
+						compatible = "unipi,gpio-do";
+						ngpio = <4>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DO1_1", "DO1_2", "DO1_3", "DO1_4";
+					};
+					aio {
+						compatible = "unipi,aio_legacy";
+						ai-value-reg = <3>;
+						ai-mode-reg = <1024>;
+						ao-value-reg = <2>;
+						ao-mode-reg = <1019>;
+					};
+					uart {
+						compatible = "unipi,uart";
+						port-count = <1>;
+						port-line = <0>;
+					};
+					led {
+						compatible = "unipi,leds";
+						coil-range = <8 4>;
+						label-prefix = "unipi:green:uled-x";
+					};
+					sysleds0:sysled {
+						compatible = "unipi,leds";
+						coil-range = <12 6>;
+						#address-cells = <1>;
+						#size-cells = <0>;
+						label-prefix = "unipi:green:sysled-x";
+					};
+				};
+			};
+		unipispi1: unipispi@1 {
+				compatible = "unipispi";
+				reg = <1>;
+				spi-max-frequency = <6000000>;
+				status = "okay";
+				modbus-address = <2>;
+				neuron-board-index = <1>;
+				neuron-probe-always-succeeds = <0>;
+				allow-protocol-v2 = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup2: iogroup2 {
+					reg = <2>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x1310>;
+					fw_name = "E-4Ai4Ao_U-4Di5Ro-1";
+					board_name = "E-4Ai4Ao-1";
+					sys_board_name = "E_4Ai4Ao_U_4Di5Ro";
+					cycle_counter = <1024>;
+					master_watchdog_enable = <14>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI1_1","DI1_2","DI1_3","DI1_4";
+						ngpio = <4>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <16>;
+					};
+					do {
+						compatible = "unipi,gpio-ro";
+						ngpio = <5>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "RO1_1","RO1_2","RO1_3","RO1_4","RO1_5";
+					};
+					ai_chip {
+						compatible = "unipi,ai";
+						io-count = <4>;
+						io-value-reg = <6>;
+						io-mode-reg = <1019>;
+					};
+					ao_chip {
+						compatible = "unipi,ao";
+						io-count = <4>;
+						io-value-reg = <2>;
+					};
+					uart {
+						compatible = "unipi,uart";
+						port-count = <1>;
+						port-line = <1>;
+					};
+				};
+			};
+		
+		};
+	};
+
+	fragment@1 {
+		target = <&usbotg1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			usbslot1@1 {
+				reg = <1>;
+			};
+		};
+	};
+	fragment@5 {
+		target = <&w1master>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	
+	fragment@10 {
+		target = <&uart1>;
+		__overlay__ {
+			status = "okay";
+			linux,rs485-enabled-at-boot-time;
+		};
+	};
+	fragment@11 {
+		target = <&uart2>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	fragment@12 {
+		target-path = "/";
+		__overlay__ {
+			lte_kill1 {
+				compatible = "unipi,rfkill-quectel912";
+				type = "wwan";
+				algo = "pulse";
+				reset-gpio = <&gpio3 20 0>;
+				rfkill-gpio = <&gpio5 21 0>;
+				monitor-usb = "usbslot1";
+			};
+		};
+	}; 
+
+};
+
+
+&iogroup1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_slotirq0>; 
+	interrupt-parent = <&gpio4>;
+	interrupts = <23 1>; /* EDGE RISING*/
+};
+
+
+
+
+
+
+
+&sysleds0 {
+	lte-sim@0 {
+		reg = <0>;
+	};
+	lte-net@1 {
+		reg = <1>;
+	};
+	lte-sig@2 {
+		reg = <2>;
+	};
+	lte-int@3 {
+		reg = <3>;
+	};
+	rs485-2-txled@4 {
+		reg = <4>;
+		linux,default-trigger = "ttymxc0-tx";
+	};
+	rs485-2-rxled@5 {
+		reg = <5>;
+		linux,default-trigger = "ttymxc0-rx";
+	};
+};

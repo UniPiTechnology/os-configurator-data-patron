@@ -1,0 +1,135 @@
+
+
+/dts-v1/;
+/plugin/;
+/ {
+	compatible = "unipi,zulu";
+
+	fragment@0 {
+		target = <&ecspi3>;
+		__overlay__ {
+			status = "okay";
+			#address-cells = <1>;
+			#size-cells = <0>;unipispi0: unipispi@0 {
+				compatible = "unipispi";
+				reg = <0>;
+				spi-max-frequency = <12000000>;
+				status = "okay";
+				modbus-address = <1>;
+				neuron-board-index = <0>;
+				neuron-probe-always-succeeds = <0>;
+				allow-protocol-v2 = <1>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				iogroup1: iogroup1 {
+					reg = <1>;
+					compatible = "unipi,unipi-mfd", "iogroup";
+					fw_variant = <0x0110>;
+					fw_name = "E_8Di8Ro-1";
+					board_name = "E_8Di8Ro";
+					sys_board_name = "E_8Di8Ro";
+					cycle_counter = <1023>;
+					master_watchdog_enable = <2>;
+
+					di {
+						compatible = "unipi,gpio-di";
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "DI0_1","DI0_2","DI0_3","DI0_4","DI0_5","DI0_6","DI0_7","DI0_8";
+						ngpio = <8>;
+						value-reg = <0>;
+						debounce-reg = <1010>;
+						counter-reg = <3>;
+					};
+					do {
+						compatible = "unipi,gpio-ro";
+						ngpio = <8>;
+						value-coil = <0>;
+						gpio-controller;
+						#gpio-cells = <2>;
+						gpio-line-names = "RO0_1","RO0_2","RO0_3","RO0_4","RO0_5","RO0_6","RO0_7","RO0_8";
+					};
+					sysleds0:sysled {
+						compatible = "unipi,leds";
+						coil-range = <16 6>;
+						#address-cells = <1>;
+						#size-cells = <0>;
+						label-prefix = "unipi:green:sysled-x";
+					};
+				};
+			};
+		
+		};
+	};
+
+	fragment@1 {
+		target = <&usbotg1>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			usbslot1@1 {
+				reg = <1>;
+			};
+		};
+	};
+	fragment@5 {
+		target = <&w1master>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	
+	fragment@10 {
+		target = <&uart1>;
+		__overlay__ {
+			status = "okay";
+			linux,rs485-enabled-at-boot-time;
+		};
+	};
+	fragment@12 {
+		target-path = "/";
+		__overlay__ {
+			reg_w1bus: regulator-w1bus {
+				compatible = "regulator-fixed";
+				regulator-name = "vdd_w1";
+				gpio = <&gpio5 21 0>;  // 0=GPIO_ACTIVE_HIGH
+				enable-active-high;
+				regulator-min-microvolt = <5000000>;
+				regulator-max-microvolt = <5000000>;
+			};
+			unipi-w1bus {
+				compatible = "unipi-consumer";
+				regulator-name = "w1-consumer";
+				regulator-boot-on;
+				regulator-supplies = "vdd_w1";
+			};
+		};
+	};
+
+};
+
+
+&iogroup1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_slotirq0>; 
+	interrupt-parent = <&gpio4>;
+	interrupts = <23 1>; /* EDGE RISING*/
+};
+
+
+
+
+
+
+
+&sysleds0 {
+	rs485-1-txled@4 {
+		reg = <4>;
+		linux,default-trigger = "ttymxc0-tx";
+	};
+	rs485-1-rxled@5 {
+		reg = <5>;
+		linux,default-trigger = "ttymxc0-rx";
+	};
+};
