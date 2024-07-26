@@ -1,4 +1,4 @@
-# Unipi-os-configurator-data-patron
+# Os-configurator-data for Unipi Patron
 
 Unipi Patron specific data for unipi-os-configurator.
 
