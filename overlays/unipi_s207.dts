@@ -95,6 +95,7 @@
 				regulator-name = "vdd_w1";
 				gpio = <&gpio5 21 0>;  // 0=GPIO_ACTIVE_HIGH
 				enable-active-high;
+				regulator-boot-on;
 				regulator-min-microvolt = <5000000>;
 				regulator-max-microvolt = <5000000>;
 			};
