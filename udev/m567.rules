@@ -28,8 +28,7 @@ ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-net
 ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-sig",  RUN+="/opt/unipi/tools/uhelper lte.1 led.sig 1 $name"
 ACTION=="add|remove", SUBSYSTEM=="leds", DEVPATH=="*iogroup1:sysled/leds/lte-int",  RUN+="/opt/unipi/tools/uhelper lte.1 led.int 1 $name"
 
-# Section Quectel EG912
-
+# Section Quectel EG912 - required for Mervis
 ACTION=="remove", GOTO="lte_end"
 
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="6001", ENV{USB_HUB_TYPE}="2c7c:6001"
